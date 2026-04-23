@@ -13,7 +13,7 @@ monthly_charges = st.number_input("Monthly Charges", min_value=0.0, value=500.0)
 total_charges = st.number_input("Total Charges", min_value=0.0, value=6000.0)
 
 if st.button("Predict"):
-    url = "http://localhost:8000/predict"  # change later for Render
+    url = "https://churn-prediction-app-i4x9.onrender.com/predict"  # change later for Render
 
     data = {
         "tenure": tenure,
