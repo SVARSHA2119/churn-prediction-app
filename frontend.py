@@ -1,6 +1,9 @@
 import streamlit as st
 import requests
 
+API_URL = "https://churn-prediction-app-i4x9.onrender.com/predict"
+
+
 st.title("Customer Churn Prediction")
 
 # Inputs
@@ -9,7 +12,8 @@ monthly_charges = st.number_input("Monthly Charges", min_value=0.0, value=500.0)
 total_charges = st.number_input("Total Charges", min_value=0.0, value=6000.0)
 
 # Backend URL (Render)
-url = "https://churn-prediction-app-i4x9.onrender.com/predict"
+API_URL = "https://churn-prediction-app-i4x9.onrender.com/predict"
+
 
 if st.button("Predict"):
 
