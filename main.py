@@ -1,28 +1,30 @@
-import joblib
-import numpy as np
+from fastapi import FastAPI
+from pydantic import BaseModel
+from predict import predict
 
-# Load model and scaler
-model = joblib.load("model.pkl")
-scaler = joblib.load("scaler.pkl")
+app = FastAPI()
 
-def predict(input_data):
-    try:
-        # Convert to numpy array
-        input_array = np.array(input_data).reshape(1, -1)
+class Customer(BaseModel):
+    tenure: int
+    monthly_charges: float
+    total_charges: float
 
-        # Scale input
-        input_scaled = scaler.transform(input_array)
+@app.get("/health")
+def health():
+    return {"status": "OK"}
 
-        # Get probability
-        prob = model.predict_proba(input_scaled)[0][1]
+@app.post("/predict")
+def get_prediction(data: Customer):
+    features = [
+        data.tenure,
+        data.monthly_charges,
+        data.total_charges
+    ]
+    
+    status, prob = predict(features)
 
-        # Decision logic
-        if prob >= 0.5:
-            status = "LEAVE"
-        else:
-            status = "STAY"
-
-        return status, prob
-
-    except Exception as e:
-        return None, str(e)
+    return {
+        "prediction": status,
+        "probability": round(prob * 100, 2),
+        "meaning": "Customer will leave" if status == "LEAVE" else "Customer will stay"
+    }
