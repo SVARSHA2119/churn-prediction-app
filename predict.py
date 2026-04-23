@@ -5,14 +5,10 @@ model = joblib.load("model.pkl")
 scaler = joblib.load("scaler.pkl")
 
 def predict(features):
-    input_array = np.array(features).reshape(1, -1)
-    input_scaled = scaler.transform(input_array)
+    X = np.array(features).reshape(1, -1)
+    X_scaled = scaler.transform(X)
 
-    prob = model.predict_proba(input_scaled)[0][1]
+    prob = model.predict_proba(X_scaled)[0][1]
+    pred = model.predict(X_scaled)[0]
 
-    if prob >= 0.5:
-        status = "LEAVE"
-    else:
-        status = "STAY"
-
-    return status, prob
+    return pred, prob
